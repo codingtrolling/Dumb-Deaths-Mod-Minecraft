@@ -11,27 +11,31 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class DeathMessageMixin {
 
-    @Inject(method = "getDeathMessage", at = @At("RETURN"), cancellable = true)
+    // method_6068 is the Intermediary name for getDeathMessage in 1.21
+    @Inject(method = "method_6068", at = @At("RETURN"), cancellable = true)
     private void changeDeathMessage(CallbackInfoReturnable<Text> cir) {
-        LivingEntity victim = (LivingEntity) (Object) this;
-        DamageSource source = victim.getRecentDamageSource();
-        
-        if (source != null && source.getAttacker() != null) {
-            String victimName = victim.getName().getString();
-            String attackerName = source.getAttacker().getName().getString();
-            String suffix = "ed";
+        try {
+            LivingEntity victim = (LivingEntity) (Object) this;
+            DamageSource source = victim.getRecentDamageSource();
+            
+            if (source != null && source.getAttacker() != null) {
+                String victimName = victim.getName().getString();
+                String attackerName = source.getAttacker().getName().getString();
+                String suffix = "ed";
 
-            // Basic Grammar logic
-            String lowerAttacker = attackerName.toLowerCase();
-            if (lowerAttacker.endsWith("e")) {
-                suffix = "d";
-            } else if (lowerAttacker.endsWith("y")) {
-                attackerName = attackerName.substring(0, attackerName.length() - 1);
-                suffix = "ied";
+                String lowerAttacker = attackerName.toLowerCase();
+                if (lowerAttacker.endsWith("e")) {
+                    suffix = "d";
+                } else if (lowerAttacker.endsWith("y")) {
+                    attackerName = attackerName.substring(0, attackerName.length() - 1);
+                    suffix = "ied";
+                }
+
+                String newMessage = victimName + " Has Been " + attackerName + suffix;
+                cir.setReturnValue(Text.literal(newMessage));
             }
-
-            String newMessage = victimName + " Has Been " + attackerName + suffix;
-            cir.setReturnValue(Text.literal(newMessage));
+        } catch (Exception e) {
+            // If anything fails, let the original death message show instead of crashing
         }
     }
 }
