@@ -24,7 +24,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
-          gradle-version: 8.5 # Forces a modern version of Gradle
+          gradle-version: 8.8 # Updated to match Fabric Loom requirements
 
       - name: Build with Gradle
         run: |
