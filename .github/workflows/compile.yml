@@ -25,15 +25,16 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: 8.8
+          cache-disabled: true # Temporarily disable cache to bypass the GitHub outage
 
       - name: Build with Gradle
         run: |
           gradle build
 
       - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: latest-build # This forces it to create/update a release named "latest-build"
           files: build/libs/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
