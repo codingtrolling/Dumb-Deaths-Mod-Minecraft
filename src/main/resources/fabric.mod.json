@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "dumbdeaths",
+  "version": "${version}",
+  "name": "Dumb Death Messages",
+  "description": "Changes death messages to [Player] Has Been [Entity]ed.",
+  "authors": ["User"],
+  "contact": {},
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.example.DumbDeaths"]
+  },
+  "mixins": ["dumbdeaths.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": "~1.21"
+  }
+}
